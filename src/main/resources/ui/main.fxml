@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+   <content>
+      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="394.0" prefWidth="592.0">
+      <children>
+         <VBox prefHeight="330.0" prefWidth="495.0">
+            <children>
+                  <HBox prefHeight="29.0" prefWidth="448.0">
+                     <children>
+                     <TextField fx:id="inputGameTitle" prefHeight="25.0" prefWidth="275.0" promptText="Title" />
+                     <TextField fx:id="inputGameID" prefHeight="25.0" prefWidth="261.0" promptText="gameID" />
+                     </children>
+                  </HBox>
+               <HBox prefHeight="100.0" prefWidth="200.0">
+                  <children>
+                        <Button fx:id="btSearchTitle" mnemonicParsing="false" onAction="#searchGameList" prefHeight="25.0" prefWidth="109.0" text="Buscar por titulo" />
+                     <Button fx:id="btDeleteList" mnemonicParsing="false" onAction="#deleteGameList" prefHeight="25.0" prefWidth="63.0" text="Borrar" />
+                        <TextField fx:id="deleteInputList" prefHeight="25.0" prefWidth="45.0" />
+                     <Button fx:id="btSearch" mnemonicParsing="false" onAction="#searchInformation" text="Buscar por gameID" />
+                        <TextField fx:id="deleteInputGame" prefHeight="25.0" prefWidth="38.0" />
+                        <Button fx:id="btDeleteGame" mnemonicParsing="false" onAction="#deleteGameList" prefHeight="25.0" prefWidth="63.0" text="Borrar" />
+                        <Button fx:id="btExport" mnemonicParsing="false" onAction="#exportCSV" text="Exportar" />
+                  </children>
+               </HBox>
+                  <TextArea fx:id="gameInformationResult" prefHeight="200.0" prefWidth="200.0" />
+            </children>
+         </VBox>
+      </children></AnchorPane>
+   </content>
+</ScrollPane>
