@@ -10,11 +10,11 @@ import java.util.List;
 
 public interface GamesDealsAPI {
 
-    @GET("deals")
-    Observable<List<DealGameInfo>> getDeals();
+    @GET("api/1.0/deals")
+    Observable<List<DealsInformationList>> getDealsList(@Query("title") String title);
 
     @GET("api/1.0/deals")
-    Observable<DealResponse> getDeal(@Query("dealID") String dealID);
+    Observable<List<DealGameInfo>> getDeal(@Query("dealID") String dealID);
 
     @GET("api/1.0/games")
     Observable<List<GamesInformationList>> getGames(@Query("title") String title, @Query("limit") int limit);

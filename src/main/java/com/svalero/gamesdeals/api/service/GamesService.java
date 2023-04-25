@@ -4,10 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 
-import com.svalero.gamesdeals.api.model.DealGameInfo;
-import com.svalero.gamesdeals.api.model.DealResponse;
-import com.svalero.gamesdeals.api.model.GamesInformationList;
-import com.svalero.gamesdeals.api.model.GamesListResponse;
+import com.svalero.gamesdeals.api.model.*;
 import io.reactivex.Observable;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -15,6 +12,7 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class GamesService {
@@ -49,20 +47,21 @@ public class GamesService {
                         "\nPrecio más barato: " + gameResponse.getCheapestPrice().getPrice()); // Agregar espacio y título adicional
     }
 
-
-
-
     public Observable<List<GamesInformationList>> getGamesTitles(String title) {
         return this.gamesDealsAPI.getGames(title, 10)
                 .map(gamesInformationLists -> gamesInformationLists)
                 .map(gamesListResponse -> gamesListResponse);
     }
 
-    public Observable<DealGameInfo> getDeal(String dealID) {
+    public Observable<List<DealGameInfo>> getDeal(String dealID) {
         return this.gamesDealsAPI.getDeal(dealID)
-                .map(dealResponse -> dealResponse.getDealGameInfo())
-                .map(dealGameInfo -> dealGameInfo);
+                .map(dealGameInfos -> dealGameInfos)
+                .map(dealGameResponse -> dealGameResponse);
     }
 
-
+    public Observable<List<DealsInformationList>> getDealsList(String title) {
+        return this.gamesDealsAPI.getDealsList(title)
+                .map(dealsInformationLists -> dealsInformationLists)
+                .map(dealListResponse -> dealListResponse);
+    }
 }

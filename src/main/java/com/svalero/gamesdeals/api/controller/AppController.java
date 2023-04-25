@@ -1,16 +1,12 @@
 package com.svalero.gamesdeals.api.controller;
 
-import com.svalero.gamesdeals.api.model.GamesInformationList;
-import com.svalero.gamesdeals.api.task.GamesListTask;
 import com.svalero.gamesdeals.api.util.R;
-import io.reactivex.functions.Consumer;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class AppController {
@@ -21,14 +17,12 @@ public class AppController {
     private Button btSearch;
     @FXML
     private Button btSearchTitle;
-
     @FXML
     private Button btSearchDeal;
-
+    @FXML
+    private Button btSearchDealsList;
     @FXML
     private TabPane tpGames;
-
-    private List<String> dealsList;
 
     @FXML
     public void searchInformation(ActionEvent event) {
@@ -84,5 +78,23 @@ public class AppController {
            ioe.printStackTrace();
         }
 
+    }
+
+    @FXML
+    public void searchDealsList(ActionEvent event) {
+        String requestedDeal = inputRequested.getText();
+        inputRequested.requestFocus();
+
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(R.getUI("results.fxml"));
+        DealListController dealListController = new DealListController(requestedDeal);
+        loader.setController(dealListController);
+        try {
+            VBox dealListBox = loader.load();
+            tpGames.setTabClosingPolicy(TabPane.TabClosingPolicy.ALL_TABS);
+            tpGames.getTabs().add(new Tab(requestedDeal, dealListBox));
+        }catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
     }
 }

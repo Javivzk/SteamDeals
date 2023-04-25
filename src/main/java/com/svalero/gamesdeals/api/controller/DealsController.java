@@ -10,10 +10,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -27,13 +24,17 @@ public class DealsController {
     @FXML
     private Button btExport;
     @FXML
-    private ListView<DealGameInfo> resultsListView;
+    private ListView<List<DealGameInfo>> resultsListView;
     @FXML
     private Label lbStatus;
     @FXML
+    private ProgressBar progressBar;
+    @FXML
     private TextField deleteInput;
     private DealDetailsTask dealDetailsTask;
-    private ObservableList<DealGameInfo> results;
+    private ObservableList<List<DealGameInfo>> results;
+    private List<String> dealsList;
+
     private String requestedDeal;
     public DealsController(String requestedDeal) {
         this.requestedDeal = requestedDeal;
@@ -44,7 +45,7 @@ public class DealsController {
     public void initialize(){
         this.results.clear();
         this.resultsListView.setItems(this.results);
-        this.dealDetailsTask = new DealDetailsTask(requestedDeal, this.results);
+        this.dealDetailsTask = new DealDetailsTask(requestedDeal, this.results, progressBar);
         this.dealDetailsTask.messageProperty().addListener((observableValue, oldValue, newValue) -> this.lbStatus.setText(newValue) ) ;
         new Thread(dealDetailsTask).start();
     }
@@ -60,7 +61,7 @@ public class DealsController {
             FileWriter writer = new FileWriter(outputFile);
             CSVWriter csvWriter = new CSVWriter(writer);
             List<String[]> data = new ArrayList<String[]>();
-            for (DealGameInfo dealGameInfo  :this.results) {
+            for (List<DealGameInfo> dealGameInfo  :this.results) {
                 data.add(new String[] {String.valueOf(dealGameInfo)});
             }
             csvWriter.writeAll(data);

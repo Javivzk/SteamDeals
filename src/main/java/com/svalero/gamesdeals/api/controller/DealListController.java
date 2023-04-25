@@ -1,6 +1,7 @@
 package com.svalero.gamesdeals.api.controller;
 
 import com.opencsv.CSVWriter;
+import com.svalero.gamesdeals.api.task.DealsListTask;
 import com.svalero.gamesdeals.api.task.GamesListTask;
 import com.svalero.gamesdeals.api.util.ZipFile;
 import javafx.collections.FXCollections;
@@ -15,7 +16,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GameListController {
+public class DealListController {
+
     @FXML
     private Button btDelete;
     @FXML
@@ -28,42 +30,42 @@ public class GameListController {
     private TextField deleteInput;
     @FXML
     private ProgressBar progressBar;
-    private List<String> gamesList;
-    private GamesListTask gamesListTask;
+    private List<String> dealsList;
+    private DealsListTask dealsListTask;
     private ObservableList<String> results;
-    private String requestedGame;
+    private String requestedDeal;
 
-    public GameListController(String requestedGame) {
-        this.requestedGame = requestedGame;
+    public DealListController(String requestedDeal) {
+        this.requestedDeal = requestedDeal;
         this.results = FXCollections.observableArrayList();
     }
 
     public void initialize() {
         this.results.clear();
         this.resultsListView.setItems(this.results); // establece el adaptador de lista
-        GamesListTask gamesListTask = new GamesListTask(requestedGame, this.results,progressBar);
-        gamesListTask.messageProperty().addListener((observableValue, oldValue, newValue) -> this.lbStatus.setText(newValue));
-        new Thread(gamesListTask).start();
+        DealsListTask dealsListTask = new DealsListTask(requestedDeal, this.results,progressBar);
+        dealsListTask.messageProperty().addListener((observableValue, oldValue, newValue) -> this.lbStatus.setText(newValue));
+        new Thread(dealsListTask).start();
     }
 
     @FXML
     public void deleteEntry(ActionEvent event) {
-        int gameListIndex = Integer.parseInt(deleteInput.getText());
-        this.results.remove(gameListIndex);
+        int dealsList = Integer.parseInt(deleteInput.getText());
+        this.results.remove(dealsList);
     }
 
     @FXML
     public void exportCSV(ActionEvent event) {
         String outputFileName = System.getProperty("user.dir") + System.getProperty("file.separator")
-                + this.requestedGame + "gameslist.csv";
+                + this.requestedDeal + "dealslist.csv";
 
         File outputFile = new File(outputFileName);
         try {
             FileWriter writer = new FileWriter(outputFile);
             CSVWriter csvWriter = new CSVWriter(writer);
             List<String[]> data = new ArrayList<String[]>();
-            for (String gamesInformationList : this.results){
-                data.add(new String[] {gamesInformationList});
+            for (String dealsInformationList : this.results){
+                data.add(new String[] {dealsInformationList});
             }
             csvWriter.writeAll(data);
             csvWriter.close();

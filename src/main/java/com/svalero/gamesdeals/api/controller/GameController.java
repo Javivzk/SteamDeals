@@ -7,10 +7,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -29,6 +26,8 @@ public class GameController {
     private Label lbStatus;
     @FXML
     private TextField deleteInput;
+    @FXML
+    private ProgressBar progressBar;
     private GameIDTask gamesTask;
     private ObservableList<String> results;
     private String requestedGame;
@@ -41,7 +40,7 @@ public class GameController {
     public void initialize(){
         this.results.clear();
         this.resultsListView.setItems(this.results);
-        this.gamesTask = new GameIDTask(requestedGame, this.results);
+        this.gamesTask = new GameIDTask(requestedGame, this.results,progressBar);
         this.gamesTask.messageProperty().addListener((observableValue, oldValue, newValue) -> this.lbStatus.setText(newValue) ) ;
         new Thread(gamesTask).start();
     }
@@ -57,8 +56,8 @@ public class GameController {
             FileWriter writer = new FileWriter(outputFile);
             CSVWriter csvWriter = new CSVWriter(writer);
             List<String[]> data = new ArrayList<String[]>();
-            for (String gamesInformationList  :this.results) {
-                data.add(new String[] {gamesInformationList});
+            for (String gameInformation  :this.results) {
+                data.add(new String[] {gameInformation});
             }
             csvWriter.writeAll(data);
             csvWriter.close();
