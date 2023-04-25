@@ -4,6 +4,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 
+import com.svalero.gamesdeals.api.model.DealGameInfo;
+import com.svalero.gamesdeals.api.model.DealResponse;
 import com.svalero.gamesdeals.api.model.GamesInformationList;
 import com.svalero.gamesdeals.api.model.GamesListResponse;
 import io.reactivex.Observable;
@@ -42,9 +44,13 @@ public class GamesService {
     public Observable<String> getGameTitle(String gameID) {
         return this.gamesDealsAPI.getGame(gameID)
                 .filter(gameResponse -> gameResponse != null) // Filtrar valores null
-                .map(gameResponse -> gameResponse.getGameInformation())
-                .map(gameInformation -> gameInformation.getTitle()); // Obtener el título del juego desde GameInformation
+                .map(gameResponse -> "Titulo -> " + gameResponse.getGameInformation().getTitle() + " (" +
+                        gameResponse.getGameInformation().getSteamAppID() + ")" +
+                        "\nPrecio más barato: " + gameResponse.getCheapestPrice().getPrice()); // Agregar espacio y título adicional
     }
+
+
+
 
     public Observable<List<GamesInformationList>> getGamesTitles(String title) {
         return this.gamesDealsAPI.getGames(title, 10)
@@ -52,11 +58,10 @@ public class GamesService {
                 .map(gamesListResponse -> gamesListResponse);
     }
 
-    public Observable<String> getDeal(String dealID) {
+    public Observable<DealGameInfo> getDeal(String dealID) {
         return this.gamesDealsAPI.getDeal(dealID)
                 .map(dealResponse -> dealResponse.getDealGameInfo())
-                .map(dealGameInfo -> dealGameInfo.getGameID() + dealGameInfo.getName()
-                        + dealGameInfo.getRetailPrice() + dealGameInfo.getSalePrice()); // Obtener el título del juego desde GameInformation
+                .map(dealGameInfo -> dealGameInfo);
     }
 
 

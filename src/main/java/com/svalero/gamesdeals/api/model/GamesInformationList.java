@@ -30,8 +30,13 @@ public class GamesInformationList {
 
     @Override
     public String toString() {
-        return "gameID: " + " " + gameID + " " + external + "\n";
-
+        StringBuilder builder = new StringBuilder();
+        builder.append("Game ID: ").append(gameID).append("\n");
+        builder.append("Titulo: ").append(external).append("\n");
+        builder.append("Mejor precio: ").append(cheapest).append(" €").append("\n");
+        return builder.toString();
     }
+
+
 
 }
