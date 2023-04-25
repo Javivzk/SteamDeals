@@ -1,6 +1,8 @@
 package com.svalero.gamesdeals.api.controller;
 
 import com.opencsv.CSVWriter;
+import com.svalero.gamesdeals.api.model.DealGameInfo;
+import com.svalero.gamesdeals.api.model.GamesInformationList;
 import com.svalero.gamesdeals.api.task.GamesListTask;
 import com.svalero.gamesdeals.api.util.ZipFile;
 import javafx.collections.FXCollections;
@@ -14,12 +16,15 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class GameListController {
     @FXML
     private Button btDelete;
     @FXML
     private Button btExport;
+    @FXML
+    private Button btFilter;
     @FXML
     private ListView<String> resultsListView;
     @FXML
@@ -28,6 +33,8 @@ public class GameListController {
     private TextField deleteInput;
     @FXML
     private ProgressBar progressBar;
+    @FXML
+    private TextField searchField;
     private List<String> gamesList;
     private GamesListTask gamesListTask;
     private ObservableList<String> results;
@@ -44,6 +51,10 @@ public class GameListController {
         GamesListTask gamesListTask = new GamesListTask(requestedGame, this.results,progressBar);
         gamesListTask.messageProperty().addListener((observableValue, oldValue, newValue) -> this.lbStatus.setText(newValue));
         new Thread(gamesListTask).start();
+    }
+
+    public void setSearchField(TextField searchField) {
+        this.searchField = searchField;
     }
 
     @FXML
@@ -71,5 +82,20 @@ public class GameListController {
         }catch (IOException e){
             e.printStackTrace();
         }
+    }
+
+    @FXML
+    private void filterGames() {
+//        String searchQuery = searchField.getText();
+//        List<List<GamesInformationList>> filteredDeals = new ArrayList<>();
+//
+//        for (List<GamesInformationList> deals : results) {
+//            List<GamesInformationList> filteredList = deals.stream()
+//                    .filter(deal -> deal.getTitle().toLowerCase().contains(searchQuery.toLowerCase()))
+//                    .collect(Collectors.toList());
+//            filteredDeals.add(filteredList);
+//        }
+//
+//        resultsListView.setItems(FXCollections.observableArrayList(filteredDeals));
     }
 }

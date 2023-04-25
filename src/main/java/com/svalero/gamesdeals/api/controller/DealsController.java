@@ -17,12 +17,15 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class DealsController {
     @FXML
     private Button btDelete;
     @FXML
     private Button btExport;
+    @FXML
+    private Button btFilter;
     @FXML
     private ListView<List<DealGameInfo>> resultsListView;
     @FXML
@@ -31,29 +34,37 @@ public class DealsController {
     private ProgressBar progressBar;
     @FXML
     private TextField deleteInput;
+    @FXML
+    private TextField searchField;
     private DealDetailsTask dealDetailsTask;
     private ObservableList<List<DealGameInfo>> results;
     private List<String> dealsList;
 
     private String requestedDeal;
+
     public DealsController(String requestedDeal) {
         this.requestedDeal = requestedDeal;
         this.results = FXCollections.observableArrayList();
 
     }
+
     @FXML
-    public void initialize(){
+    public void initialize() {
         this.results.clear();
         this.resultsListView.setItems(this.results);
         this.dealDetailsTask = new DealDetailsTask(requestedDeal, this.results, progressBar);
-        this.dealDetailsTask.messageProperty().addListener((observableValue, oldValue, newValue) -> this.lbStatus.setText(newValue) ) ;
+        this.dealDetailsTask.messageProperty().addListener((observableValue, oldValue, newValue) -> this.lbStatus.setText(newValue));
         new Thread(dealDetailsTask).start();
+    }
+
+    public void setSearchField(TextField searchField) {
+        this.searchField = searchField;
     }
 
     @FXML
     public void exportCSV(ActionEvent event) {
         String outputFileName = System.getProperty("user.dir") + System.getProperty("file.separator")
-                +  this.requestedDeal + "dealbyid.csv";
+                + this.requestedDeal + "dealbyid.csv";
 
         File outputFile = new File(outputFileName);
 
@@ -61,22 +72,35 @@ public class DealsController {
             FileWriter writer = new FileWriter(outputFile);
             CSVWriter csvWriter = new CSVWriter(writer);
             List<String[]> data = new ArrayList<String[]>();
-            for (List<DealGameInfo> dealGameInfo  :this.results) {
-                data.add(new String[] {String.valueOf(dealGameInfo)});
+            for (List<DealGameInfo> dealGameInfo : this.results) {
+                data.add(new String[]{String.valueOf(dealGameInfo)});
             }
             csvWriter.writeAll(data);
             csvWriter.close();
             ZipFile.createZipFile(outputFileName);
-        }catch (IOException ioe) {
+        } catch (IOException ioe) {
             ioe.printStackTrace();
         }
     }
 
     @FXML
     public void deleteEntry(ActionEvent event) {
-        int informationListIndex  = Integer.parseInt(deleteInput.getText());
-        this.results.remove(informationListIndex );
+        int informationListIndex = Integer.parseInt(deleteInput.getText());
+        this.results.remove(informationListIndex);
     }
 
+    @FXML
+    private void filterGames() {
+        String searchQuery = searchField.getText();
+        List<List<DealGameInfo>> filteredDeals = new ArrayList<>();
 
+        for (List<DealGameInfo> deals : results) {
+            List<DealGameInfo> filteredList = deals.stream()
+                    .filter(deal -> deal.getStoreID().toLowerCase().contains(searchQuery.toLowerCase()))
+                    .collect(Collectors.toList());
+            filteredDeals.add(filteredList);
+        }
+
+        resultsListView.setItems(FXCollections.observableArrayList(filteredDeals));
+    }
 }

@@ -20,7 +20,7 @@
                   <Insets left="10.0" />
                </HBox.margin>
             </Button>
-            <TextField fx:id="deleteInput">
+            <TextField fx:id="deleteInput" prefHeight="25.0" prefWidth="33.0">
                <HBox.margin>
                   <Insets left="5.0" />
                </HBox.margin>
@@ -35,6 +35,12 @@
                   <Insets left="5.0" />
                </HBox.margin>
             </Label>
+            <TextField fx:id="searchField" layoutX="84.0" layoutY="10.0" prefHeight="25.0" prefWidth="91.0" promptText="Filtro" />
+            <Button fx:id="btFilter" layoutX="137.0" layoutY="10.0" mnemonicParsing="false" onAction="#filterGames" text="Filtrar">
+               <HBox.margin>
+                  <Insets left="10.0" />
+               </HBox.margin>
+            </Button>
          </children>
       </HBox>
    </children>

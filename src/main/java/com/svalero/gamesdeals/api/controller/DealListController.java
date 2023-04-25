@@ -1,6 +1,8 @@
 package com.svalero.gamesdeals.api.controller;
 
 import com.opencsv.CSVWriter;
+import com.svalero.gamesdeals.api.model.DealGameInfo;
+import com.svalero.gamesdeals.api.model.DealsInformationList;
 import com.svalero.gamesdeals.api.task.DealsListTask;
 import com.svalero.gamesdeals.api.task.GamesListTask;
 import com.svalero.gamesdeals.api.util.ZipFile;
@@ -14,7 +16,9 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class DealListController {
 
@@ -23,6 +27,8 @@ public class DealListController {
     @FXML
     private Button btExport;
     @FXML
+    private Button btFilter;
+    @FXML
     private ListView<String> resultsListView;
     @FXML
     private Label lbStatus;
@@ -30,14 +36,16 @@ public class DealListController {
     private TextField deleteInput;
     @FXML
     private ProgressBar progressBar;
+    @FXML
+    private TextField searchField;
     private List<String> dealsList;
     private DealsListTask dealsListTask;
-    private ObservableList<String> results;
+    private ObservableList<String> results; // cambiar tipo de ObservableList
     private String requestedDeal;
 
     public DealListController(String requestedDeal) {
         this.requestedDeal = requestedDeal;
-        this.results = FXCollections.observableArrayList();
+        this.results = FXCollections.observableArrayList(); // cambiar tipo de ObservableList
     }
 
     public void initialize() {
@@ -48,11 +56,16 @@ public class DealListController {
         new Thread(dealsListTask).start();
     }
 
+    public void setSearchField(TextField searchField) {
+        this.searchField = searchField;
+    }
+
     @FXML
     public void deleteEntry(ActionEvent event) {
         int dealsList = Integer.parseInt(deleteInput.getText());
         this.results.remove(dealsList);
     }
+
 
     @FXML
     public void exportCSV(ActionEvent event) {
@@ -74,4 +87,17 @@ public class DealListController {
             e.printStackTrace();
         }
     }
+
+    @FXML
+    private void filterGames() {
+//
+
+    }
+
 }
+
+
+
+
+
+

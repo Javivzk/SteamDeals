@@ -1,11 +1,16 @@
 package com.svalero.gamesdeals.api.task;
 
+import com.svalero.gamesdeals.api.model.DealsInformationList;
+import com.svalero.gamesdeals.api.model.GameInformation;
 import com.svalero.gamesdeals.api.service.GamesService;
 import io.reactivex.functions.Consumer;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.scene.control.ProgressBar;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class GameIDTask extends Task<Integer> {
 
@@ -39,6 +44,16 @@ public class GameIDTask extends Task<Integer> {
 
 
         return null;
+    }
+
+    private List<GameInformation> filterDeals(List<GameInformation> dealGameInfo, String filterText) {
+        if (filterText == null || filterText.trim().isEmpty()) {
+            return dealGameInfo;
+        }
+        String lowerCaseFilter = filterText.toLowerCase();
+        return dealGameInfo.stream()
+                .filter(dealGameInfo1 -> dealGameInfo1.getTitle().toLowerCase().contains(lowerCaseFilter))
+                .collect(Collectors.toList());
     }
 
     @Override

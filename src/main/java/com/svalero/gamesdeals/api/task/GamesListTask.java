@@ -1,5 +1,6 @@
 package com.svalero.gamesdeals.api.task;
 
+import com.svalero.gamesdeals.api.model.GameInformation;
 import com.svalero.gamesdeals.api.model.GamesInformationList;
 import com.svalero.gamesdeals.api.service.GamesService;
 import io.reactivex.functions.Consumer;
@@ -45,6 +46,16 @@ public class GamesListTask extends Task<Integer> {
 
         gamesService.getGamesTitles(requestedGame).subscribe(userGamesList);
         return null;
+    }
+
+    private List<GamesInformationList> filterDeals(List<GamesInformationList> dealGameInfo, String filterText) {
+        if (filterText == null || filterText.trim().isEmpty()) {
+            return dealGameInfo;
+        }
+        String lowerCaseFilter = filterText.toLowerCase();
+        return dealGameInfo.stream()
+                .filter(dealGameInfo1 -> dealGameInfo1.getTitle().toLowerCase().contains(lowerCaseFilter))
+                .collect(Collectors.toList());
     }
     @Override
     protected void succeeded() {

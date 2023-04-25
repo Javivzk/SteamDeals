@@ -20,6 +20,7 @@ public class DealDetailsTask extends Task<Integer> {
     private ObservableList<List<DealGameInfo>> results;
     private int counter;
     private ProgressBar progressBar;
+    private String filterText;
 
 
     public DealDetailsTask(String requestedDeal, ObservableList<List<DealGameInfo>> results, ProgressBar progressBar) {
@@ -38,6 +39,7 @@ public class DealDetailsTask extends Task<Integer> {
             updateProgress(this.counter, 100);
             Thread.sleep(100);
             updateMessage(String.valueOf(this.counter) + " Lista de resultados devuelta");
+            List<DealGameInfo> filteredList = filterDeals(dealGameInfo, filterText);
             Platform.runLater(() -> {
                 this.results.addAll(dealGameInfo);
             });
@@ -47,6 +49,16 @@ public class DealDetailsTask extends Task<Integer> {
         gamesService.getDeal(requestedDeal).subscribe(userDealsInfo);
 
         return null;
+    }
+
+    private List<DealGameInfo> filterDeals(List<DealGameInfo> dealGameInfo, String filterText) {
+        if (filterText == null || filterText.trim().isEmpty()) {
+            return dealGameInfo;
+        }
+        String lowerCaseFilter = filterText.toLowerCase();
+        return dealGameInfo.stream()
+                .filter(dealGameInfo1 -> dealGameInfo1.getName().toLowerCase().contains(lowerCaseFilter))
+                .collect(Collectors.toList());
     }
 
     @Override
